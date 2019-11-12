@@ -17,7 +17,7 @@ export default class Dashboard extends Component {
             metamaskConnected: false,
             userAccount: null,
             ethBalance: null,
-            contractAddress: "0x04d27c6ec43f965bd490935873c9aea6987bdef4",
+            contractAddress: "0xECdAb99dBa830F3a097c3bF97139E24Bd4A214d0",
             kingAddress: null,
             kingRansom: null,
             kingAmount: 0,
@@ -107,7 +107,7 @@ export default class Dashboard extends Component {
         contract.methods.kingRansom().call((err, res) => {
             if(!err) {
                 const ethAmount = +web3.utils.fromWei(res);
-                this.setState({kingRansom: ethAmount.toFixed(4)})
+                this.setState({kingRansom: ethAmount.toFixed(3)})
             }
             else {
                 console.log(err);
@@ -132,7 +132,7 @@ export default class Dashboard extends Component {
                 if(!err) {
                     let shortenedEthBalance = +web3.utils.fromWei(res);
                     this.setState({
-                        ethBalance: shortenedEthBalance.toFixed(4)
+                        ethBalance: shortenedEthBalance.toFixed(3)
                     })
                 }
                 else {
