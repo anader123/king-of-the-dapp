@@ -1,2 +1,0 @@
-## King of the Dapp
-A simple tutorial that shows how easy it can be to integrate a React interface with an Ethereum smart contract. King of the Dapp is a game where a user much stake Ether in a contract in order to be crowned King. If they would like to dethrown the current King, they must lock more Ether in the contract that the current King.
