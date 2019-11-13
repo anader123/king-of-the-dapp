@@ -1,7 +1,6 @@
 import React from 'react';
+import './KingView.css';
 import blockies from 'ethereum-blockies-png';
-
-// Contract address https://ropsten.etherscan.io/address/0x04d27c6ec43f965bd490935873c9aea6987bdef4
 
 export default function KingView(props) {
     const { userAccount, ethBalance, kingRansom, kingAddress, kingMe, handleInputAmountChange, kingAmount } = props;

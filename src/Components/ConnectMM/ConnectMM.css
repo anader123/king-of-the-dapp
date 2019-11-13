@@ -1,0 +1,17 @@
+
+.connect-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 30vh;
+}
+  
+.mm-download {
+    color: white;
+    margin-top: 3em;
+}
+
+.mm-message {
+    margin-bottom: 3em;
+}
