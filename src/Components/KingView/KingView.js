@@ -19,7 +19,7 @@ export default function KingView(props) {
             <div className='input-container'>
                 <input className='input-box' onChange={handleInputAmountChange} value={kingAmount} type="number"/>
                 <button className='input-btn' onClick={kingMe}>King Me</button>
-                <p className='input-text'>*The amount entered must be greater than the current King's Ransom by more than 0.1 ETH.</p>
+                <p className='input-text'>*The amount entered must be at least 0.1 ETH more than the current amount.</p>
             </div>
             <p className='medium-link'>Read the tutorial on Medium.</p>
         </div>

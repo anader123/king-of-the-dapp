@@ -14,7 +14,7 @@ export default function Dashboard() {
     const [userAccount, setUserAccount] = useState("");
     const [ethBalance, setEthBalance] = useState("0");
     // Contract was already deployed to this address on the Ropsten Test Network
-    const [contractAddress] = useState("0xECdAb99dBa830F3a097c3bF97139E24Bd4A214d0");
+    const [contractAddress] = useState("0x2800cC9F11E0956B20FE48FcC8b69db310D93f02");
     const [kingAddress, setKingAddress] = useState("");
     const [kingRansom, setKingRansom] = useState("0");
     const [kingAmount, setKingAmount] = useState("0");

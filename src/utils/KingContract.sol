@@ -16,7 +16,7 @@ contract KingDappContract {
     }
 
     function becomeKing() public payable {
-        require(msg.value > (kingRansom + 0.1 ether), "Eth included was not enough");
+        require(msg.value >= (kingRansom + 0.1 ether), "Eth included was not enough");
         address payable oldKing = King;
         uint oldRansom = kingRansom;
         King = msg.sender;
