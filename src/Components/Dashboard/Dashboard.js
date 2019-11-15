@@ -114,7 +114,7 @@ export default function Dashboard() {
 
     // Method that creates an Eth transaction to update the state of the contract
     const kingMe = () => {
-        // Makes sure that the use has entered in an amount that is more than 0.1 Eth greater than the current kingRansom
+        // Makes sure that the use has entered in an amount that is at least 0.1 Eth greater than the current kingRansom
         if(+kingAmount >= (+kingRansom + 0.1)) {
             const weiValue = web3.utils.toWei(kingAmount);
 
