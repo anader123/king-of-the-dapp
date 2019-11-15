@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Web3 from 'web3';
 import { abi } from '../../utils/contractABI';
 import swal from '@sweetalert/with-react';
-import ethlogo from '../../utils/ethlogo.png';
+import ethlogo from '../../img/ethlogo.png';
 
 // React Components 
 import ConnectMM from '../ConnectMM/ConnectMM';
