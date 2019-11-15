@@ -115,7 +115,7 @@ export default function Dashboard() {
     // Method that creates an Eth transaction to update the state of the contract
     const kingMe = () => {
         // Makes sure that the use has entered in an amount that is more than 0.1 Eth greater than the current kingRansom
-        if(+kingAmount > (+kingRansom + 0.1)) {
+        if(+kingAmount >= (+kingRansom + 0.1)) {
             const weiValue = web3.utils.toWei(kingAmount);
 
             const transactionObject = {
@@ -152,7 +152,7 @@ export default function Dashboard() {
             swal({
                 icon: "error",
                 title: "Incorrect Amount",
-                text: "The amount entered must be greater than the current King's Ransom by more than 0.1 ETH."
+                text: "The amount entered must be at least 0.1 ETH greater than the current King's Ransom."
             });
         }
     };
