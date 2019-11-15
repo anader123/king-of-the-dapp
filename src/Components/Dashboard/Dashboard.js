@@ -141,7 +141,13 @@ export default function Dashboard() {
                         });
                     })
                 .catch(err => {
-                    console.log("err",err)
+                    console.log("err",err);
+                    swal({
+                        icon: "error",
+                        title: "Transaction Failed",
+                        text: "There was an error sending this transaciton.",
+                        button: true
+                    })
                 });
             // Sets in the input box to zero
             setKingAmount("0")
