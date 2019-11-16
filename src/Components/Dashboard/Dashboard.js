@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Web3 from 'web3';
+
+// Local Files
 import { abi } from '../../utils/contractABI';
 import swal from '@sweetalert/with-react';
 import ethlogo from '../../img/ethlogo.png';
 
-// React Components 
+// React Components
 import ConnectMM from '../ConnectMM/ConnectMM';
 import KingView from '../KingView/KingView';
 
@@ -47,7 +49,8 @@ export default function Dashboard() {
                         checkContractInfo();
                         checkEthBalance(res[0]);
                     }, 25000);
-                });
+                })
+                .catch(err => console.log(err));
         }
         else {
             // Error message thrown if the user isn't connect to Ropsten
@@ -135,9 +138,11 @@ export default function Dashboard() {
                         closeOnClickOutside: false,
                         content: (
                             <div>
-                                    <p>Transaction Hash:</p>
-                                    <p><a target="_blank" rel="noopener noreferrer" href={`https://ropsten.etherscan.io/tx/${res.transactionHash}`}>{res.transactionHash}</a></p>
-                                </div>)
+                                <p>Transaction Hash:</p>
+                                <p>
+                                    <a target="_blank" rel="noopener noreferrer" href={`https://ropsten.etherscan.io/tx/${res.transactionHash}`}>{res.transactionHash}</a>
+                                </p>
+                            </div>)
                         });
                     })
                 .catch(err => {
@@ -167,7 +172,8 @@ export default function Dashboard() {
         swal({
             closeOnClickOutside: false,
             button: false,
-            content: (<div>
+            content: 
+            (<div>
                 <img className='block-load-img' src={ethlogo} alt='block loading'/>
                 <p>Blockchain magic in progress...</p>
                 <br/>

@@ -21,7 +21,9 @@ export default function KingView(props) {
                 <button className='input-btn' onClick={kingMe}>King Me</button>
                 <p className='input-text'>*The amount entered must be at least 0.1 ETH more than the current amount.</p>
             </div>
-            <p className='medium-link'>Read the tutorial on Medium.</p>
+                <a target="_blank" rel="noopener noreferrer" href="https://medium.com/@0xnaderdev/king-of-the-dapp-an-overview-on-how-to-create-a-react-interface-for-an-ethereum-smart-contract-de53334619ea">
+                    <p className='medium-link'>Read the tutorial on Medium.</p>
+                </a>
         </div>
     )
 }

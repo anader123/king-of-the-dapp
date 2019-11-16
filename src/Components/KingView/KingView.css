@@ -62,6 +62,10 @@
     margin-top: 4em;
   }
   
+  a {
+    color: white
+  }
+  
   .user-address {
     margin-bottom: .2em;
   }
