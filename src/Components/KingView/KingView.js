@@ -3,7 +3,7 @@ import './KingView.css';
 import blockies from 'ethereum-blockies-png';
 
 export default function KingView(props) {
-    const { userAccount, ethBalance, kingRansom, kingAddress, kingMe, handleInputAmountChange, kingAmount } = props;
+    const { userAccount, ethBalance, kingRansom, kingAddress, kingMe, handleInputAmountChange, kingInputAmount } = props;
     let URL = blockies.createDataURL({seed: kingAddress});
     return (
         <div className='dashboard-container'>
@@ -17,7 +17,7 @@ export default function KingView(props) {
                 <p>King's Ransom: {kingRansom} ETH</p>
             </div>
             <div className='input-container'>
-                <input className='input-box' onChange={handleInputAmountChange} value={kingAmount} type="number"/>
+                <input className='input-box' onChange={handleInputAmountChange} value={kingInputAmount} type="number"/>
                 <button className='input-btn' onClick={kingMe}>King Me</button>
                 <p className='input-text'>*The amount entered must be at least 0.1 ETH more than the current amount.</p>
             </div>
