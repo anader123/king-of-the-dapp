@@ -55,11 +55,11 @@ export const genericErrorAlert = () => {
         })
 }
 
-export const installMetaMaskAlert = () => {
+export const installWalletAlert = () => {
     return swal({
             icon: "error",
-            title: "MetaMask Missing",
-            text: "Please make sure that you have the MetaMask extension installed.",
+            title: "Ethereum Wallet Missing",
+            text: "Please make sure that you have an Ethereum wallet installed.",
             button: true
     })
 }

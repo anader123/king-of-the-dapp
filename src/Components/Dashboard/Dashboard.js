@@ -10,7 +10,7 @@ import {
     transactionFailedAlert,
     sendingTransactionAlert,
     genericErrorAlert,
-    installMetaMaskAlert
+    installWalletAlert
 } from '../../utils/alerts';
 
 // Formatting Functions
@@ -70,7 +70,7 @@ export default class Dashboard extends Component {
                 networkErrorAlert();
             }
         } else {
-            installMetaMaskAlert();
+            installWalletAlert();
         }
     }
 
