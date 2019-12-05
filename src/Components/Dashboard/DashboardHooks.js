@@ -7,12 +7,12 @@ import swal from '@sweetalert/with-react';
 import ethlogo from '../../img/ethlogo.png';
 
 // React Components
-import ConnectMM from '../ConnectMM/ConnectMM';
+import ConnectWallet from '../ConnectWallet/ConnectWallet';
 import KingView from '../KingView/KingView';
 
 export default function Dashboard() {
     // React Hooks
-    const [metamaskConnected, setMetaMaskConnect] = useState(false);
+    const [walletConnected, setMetaMaskConnect] = useState(false);
     const [userAccount, setUserAccount] = useState("");
     const [ethBalance, setEthBalance] = useState("0");
     // Contract was already deployed to this address on the Ropsten Test Network
@@ -34,7 +34,7 @@ export default function Dashboard() {
     }, [contractAddress]);
 
     // Prompts the user to connect their MetaMask account to the website
-    const connectMetaMask = () => {
+    const connectWallet = () => {
         const { ethereum } = window;
         // Contract was deployed to Ropsten, this checks to make sure that the user is connected to the correct network
         if(ethereum.networkVersion === "3") {
@@ -189,10 +189,10 @@ export default function Dashboard() {
     return (
         <div>
             {/* Conditional rendering based on if the user has connected their MetaMask account */}
-            {!metamaskConnected
+            {!walletConnected
             ?
             <div>
-                <ConnectMM connectMetaMask={connectMetaMask} /> 
+                <ConnectWallet connectWallet={connectWallet} /> 
             </div>
             : 
             <div>

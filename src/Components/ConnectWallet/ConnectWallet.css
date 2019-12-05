@@ -14,4 +14,11 @@
 
 .mm-message {
     margin-bottom: 3em;
+    text-align: center;
+}
+
+@media (max-width: 480px) {
+    .mm-message {
+        margin-top: 2em;
+    }
 }

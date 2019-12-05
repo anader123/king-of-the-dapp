@@ -17,7 +17,7 @@ import {
 import { formatEthAmount } from '../../utils/formatValues';
 
 // React Components 
-import ConnectMM from '../ConnectMM/ConnectMM';
+import ConnectWallet from '../ConnectWallet/ConnectWallet';
 import KingView from '../KingView/KingView';
 
 export default class Dashboard extends Component {
@@ -25,11 +25,13 @@ export default class Dashboard extends Component {
         super();
         
         this.state = {
-            metamaskConnected: false,
+            walletConnected: false,
             userAccount: null,
             ethBalance: null,
-            // contractAddress: "0x2800cC9F11E0956B20FE48FcC8b69db310D93f02",
-            contractAddress: "0xABB2986b02fFfef2ac9D4fFE0397Cb0A6C254591",
+            // Ropsten
+            contractAddress: "0x2800cC9F11E0956B20FE48FcC8b69db310D93f02",
+            // Ganache
+            // contractAddress: "0xABB2986b02fFfef2ac9D4fFE0397Cb0A6C254591",
             kingAddress: null,
             kingRansom: null,
             kingInputAmount: "",
@@ -39,22 +41,21 @@ export default class Dashboard extends Component {
         }
     }
     
-    // Prompts the user to connect their MetaMask account
-    connectMetaMask = async () => {
-        const { ethereum } = window;
+    // Prompts the user to connect their Ethereum wallet
+    connectWallet = async () => {
         const { contractAddress } = this.state;
 
         // Creating both a web3 and contract instance
         const web3 = new Web3(Web3.givenProvider);
         const contract = new web3.eth.Contract(abi, contractAddress);
 
-        if(ethereum) {
-        // The if statement checks to make sure that they are connected to the Ropsten Network
-            // if(ethereum.networkVersion === "3") {
+        if(window.ethereum) {
+        // Makes sure that the user is connected to Ropsten
+            if(window.ethereum.networkVersion === "3") {
                 try {
-                    const res = await ethereum.enable()
+                    const res = await window.ethereum.enable()
                     this.setState({
-                        metamaskConnected: true,
+                        walletConnected: true,
                         userAccount: res[0],
                         // Storing instances in the state obj
                         contract,
@@ -65,10 +66,9 @@ export default class Dashboard extends Component {
                     console.log(error)
                     genericErrorAlert()
                 }
-            // } else {
-            //     // Error alert thrown if the user isn't connect to Ropsten
-            //     networkErrorAlert();
-            // }
+            } else {
+                networkErrorAlert();
+            }
         } else {
             installMetaMaskAlert();
         }
@@ -79,29 +79,21 @@ export default class Dashboard extends Component {
         this.checkContractInfo();
         this.checkCurrentAccount();
         this.checkEthBalance(res[0]);
-        setInterval(() => {
-            this.checkEthBalance(res[0]);
-        }, 25000);
     }
 
     // Checks the current state of the contract variables
     checkContractInfo = async () => {
         const { contract } = this.state;
         if(contract) {
-            // Returns which address is the current King
             try{
+                // Returns which address is the current King
                 const kingAddress = await contract.methods.King().call();
-                this.setState({ kingAddress });
-            } catch (error) {
-                console.log(error);
-                genericErrorAlert();
-            }
 
-            // Returns how much Ether that address has locked up
-            try {
-                const response = await contract.methods.kingRansom().call();
-                const kingRansom = formatEthAmount(response);
-                this.setState({ kingRansom });
+                // Returns how much Ether is locked up in Wei
+                const weiKingRansom = await contract.methods.kingRansom().call();
+                const kingRansom = formatEthAmount(weiKingRansom);
+
+                this.setState({ kingRansom, kingAddress });
                 this.coronationSubscription(contract);
             } catch (error) {
                 console.log(error);
@@ -131,7 +123,7 @@ export default class Dashboard extends Component {
     // Looks for the user's current Eth balance on the Ropsten Test Network, if they are on a different network it throws an error message
     checkEthBalance = (account) => {
         const { web3 } = this.state;
-        if(account !== undefined) {
+        if(account) {
             web3.eth.getBalance(account, (err, res) => {
                 if(!err) {
                     // The response comes back as a string, however, I only want to display 3 decimal places so I convert it to a number to use the toFixed method
@@ -147,7 +139,7 @@ export default class Dashboard extends Component {
             });
         }
         else {
-            this.setState({metamaskConnected: false});
+            this.setState({walletConnected: false});
         }
     }
     
@@ -158,9 +150,7 @@ export default class Dashboard extends Component {
 
         // Anytime the user changes their MetaMask account this function will run and update the UI to show the selected account and its Ether balance
         ethereum.on('accountsChanged', (accounts) => {
-            this.setState({
-                userAccount: accounts[0]
-            });
+            this.setState({ userAccount: accounts[0] });
             this.checkEthBalance(accounts[0]);
         });
     }
@@ -178,6 +168,7 @@ export default class Dashboard extends Component {
 
             contract.methods.becomeKing().send({ from: userAccount, value })
                 .on('receipt', (txHash) => {
+                    this.checkEthBalance(userAccount);
                     transactionSuccessAlert(txHash);
                 })
                 .on('error', (error) => {
@@ -191,7 +182,6 @@ export default class Dashboard extends Component {
             // Creates an animation while the use is waiting for their tx to be submitted.
             sendingTransactionAlert();
         } else {
-            console.log('hit')
             transactionFailedAlert();
         }
     }
@@ -203,20 +193,42 @@ export default class Dashboard extends Component {
         });
     }
 
+    // Stops listening for Coronation events when the component unmounts
+    componentWillUnmount() {
+        const { coronationSub } = this.state;
+        if(coronationSub) {
+            coronationSub.unsubcribe();
+        }
+    }
+
     render() {
-        const { metamaskConnected, ethBalance, userAccount, kingAddress, kingRansom, kingInputAmount } = this.state;
+        const { 
+            walletConnected, 
+            ethBalance, 
+            userAccount, 
+            kingAddress, 
+            kingRansom, 
+            kingInputAmount 
+        } = this.state;
         return (
             <div>
-                {/* Conditional rendering based on if the user has connected their MetaMask account */}
-                {!metamaskConnected
+                {/* Conditional rendering based on if the user has connected their Ethereum wallet */}
+                {!walletConnected
                 ?
                 <div>
-                    <ConnectMM connectMetaMask={this.connectMetaMask} /> 
+                    <ConnectWallet connectWallet={this.connectWallet} /> 
                 </div>
                 : 
                 <div>
-                    {/* View that shows info about the user's MetaMask account and the state of the King of the Dapp Contract */}
-                    <KingView handleInputAmountChange={this.handleInputAmountChange} ethBalance={ethBalance} userAccount={userAccount} kingAddress={kingAddress} kingInputAmount={kingInputAmount} kingRansom={kingRansom} kingMe={this.kingMe}/>
+                    {/* Component shows info about the user's Ethereum wallet and the state of the King of the Dapp Contract */}
+                    <KingView handleInputAmountChange={this.handleInputAmountChange} 
+                        ethBalance={ethBalance} 
+                        userAccount={userAccount} 
+                        kingAddress={kingAddress} 
+                        kingInputAmount={kingInputAmount} 
+                        kingRansom={kingRansom} 
+                        kingMe={this.kingMe}
+                    />
                 </div>}
             </div>
         )

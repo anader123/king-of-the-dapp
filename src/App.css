@@ -49,3 +49,10 @@ button:hover {
   background-color: rgb(238, 235, 235);
   border-radius: 5px;
 }
+
+@media (max-width: 450px) {
+  .App-container {
+    width: 75%;
+    height: 83%;
+  }
+}
