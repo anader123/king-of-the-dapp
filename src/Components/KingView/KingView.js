@@ -10,23 +10,34 @@ export default function KingView(props) {
         kingAddress, 
         kingMe, 
         handleInputAmountChange, 
-        kingInputAmount 
+        kingInputAmount,
+        loading
     } = props;
     
     let URL = blockies.createDataURL({seed: kingAddress});
     return (
         <div className='dashboard-container'>
 
-            <div className='user-info-container'>
-                <p className='user-address'>Your Address: {userAccount}</p>
-                <p>Balance: {ethBalance} ETH</p>
-            </div>
+                <div className='user-info-container'>
+                    <p className='user-address'>Your Address: {userAccount}</p>
+                    <div>
+                        <span>Balance:</span> {loading ? <span>Loading</span> : <span>{ethBalance} ETH</span>}
+                    </div>
+                    
+                </div>
 
-            <div className='king-info-container'>
-                <img className='blockie-img' alt='eth-blockie' src={URL} />
-                <p className='king-address'>King: {kingAddress}</p>
-                <p>King's Ransom: {kingRansom} ETH</p>
+            {loading
+            ?
+            <div className='loading-text'>Loading...</div>
+            :
+            <div>
+                <div className='king-info-container'>
+                    <img className='blockie-img' alt='eth-blockie' src={URL} />
+                    <p className='king-address'>King: {kingAddress}</p>
+                    <p>King's Ransom: {kingRansom} ETH</p>
+                </div>
             </div>
+            }
 
             <div className='input-container'>
                 <input className='input-box' 

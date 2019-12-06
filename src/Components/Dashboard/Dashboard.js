@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import Web3 from 'web3';
-import { abi } from '../../utils/contractABI';
+import { abi } from '../../abis/KingDappContract';
 import BigNumber from 'bignumber.js';
 
 // Sweet Alerts
 import {
     networkErrorAlert,
     transactionSuccessAlert,
-    transactionFailedAlert,
+    invalidAmountAlert,
     sendingTransactionAlert,
     genericErrorAlert,
     installWalletAlert
@@ -37,7 +37,8 @@ export default class Dashboard extends Component {
             kingInputAmount: "",
             contract: {},
             web3: {},
-            coronationSub: null
+            coronationSub: null,
+            loading: true
         }
     }
     
@@ -93,7 +94,7 @@ export default class Dashboard extends Component {
                 const weiKingRansom = await contract.methods.kingRansom().call();
                 const kingRansom = formatEthAmount(weiKingRansom);
 
-                this.setState({ kingRansom, kingAddress });
+                this.setState({ kingRansom, kingAddress, loading: false });
                 this.coronationSubscription(contract);
             } catch (error) {
                 console.log(error);
@@ -163,7 +164,7 @@ export default class Dashboard extends Component {
         const kingInputAmountTest = new BigNumber(kingInputAmount);
 
         // Makes sure that the use has entered in an amount that is at least 0.1 Eth greater than the current kingRansom
-        if(kingInputAmountTest >= (kingRansomTest + 0.1)) {
+        if(kingInputAmountTest >= (kingRansomTest + 0.1) && kingInputAmount !== '') {
             const value = web3.utils.toWei(kingInputAmount);
 
             contract.methods.becomeKing().send({ from: userAccount, value })
@@ -182,7 +183,7 @@ export default class Dashboard extends Component {
             // Creates an animation while the use is waiting for their tx to be submitted.
             sendingTransactionAlert();
         } else {
-            transactionFailedAlert();
+            invalidAmountAlert();
         }
     }
 
@@ -208,28 +209,27 @@ export default class Dashboard extends Component {
             userAccount, 
             kingAddress, 
             kingRansom, 
-            kingInputAmount 
+            kingInputAmount,
+            loading
         } = this.state;
         return (
             <div>
                 {/* Conditional rendering based on if the user has connected their Ethereum wallet */}
                 {!walletConnected
                 ?
-                <div>
-                    <ConnectWallet connectWallet={this.connectWallet} /> 
-                </div>
+                <ConnectWallet connectWallet={this.connectWallet} /> 
                 : 
-                <div>
-                    {/* Component shows info about the user's Ethereum wallet and the state of the King of the Dapp Contract */}
-                    <KingView handleInputAmountChange={this.handleInputAmountChange} 
-                        ethBalance={ethBalance} 
-                        userAccount={userAccount} 
-                        kingAddress={kingAddress} 
-                        kingInputAmount={kingInputAmount} 
-                        kingRansom={kingRansom} 
-                        kingMe={this.kingMe}
-                    />
-                </div>}
+                //  Component shows info about the user's Ethereum wallet and the state of the King of the Dapp Contract
+                <KingView handleInputAmountChange={this.handleInputAmountChange} 
+                ethBalance={ethBalance} 
+                    userAccount={userAccount} 
+                    kingAddress={kingAddress} 
+                    kingInputAmount={kingInputAmount} 
+                    kingRansom={kingRansom} 
+                    kingMe={this.kingMe}
+                    loading={loading}
+                />
+                }
             </div>
         )
     }

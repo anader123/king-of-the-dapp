@@ -11,6 +11,12 @@
   text-align: center;
 }
 
+.loading-text {
+  margin-top: 4em;
+  margin-bottom: 4em;
+  font-size: 2em;
+}
+
 .dashboard-container {
   display: flex;
   flex-direction: column;
@@ -66,7 +72,7 @@ a {
 }
 
 .user-address {
-  margin-bottom: .2em;
+  margin-bottom: .5em;
 }
 
 .block-load-img {
@@ -98,5 +104,9 @@ a {
     font-size: .7em;
     width: 55vw;
     margin-top: .5em;
+  }
+  .loading-text {
+    margin-top: 3em;
+    margin-bottom: 1em;
   }
 }

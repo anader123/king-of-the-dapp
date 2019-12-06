@@ -25,11 +25,11 @@ export const transactionSuccessAlert = (response) => {
         })
 }
 
-export const transactionFailedAlert = () => {
+export const invalidAmountAlert = () => {
     return swal({
             icon: "error",
-            title: "Transaction Failed",
-            text: "There was an error sending this transaciton.",
+            title: "Invalid Amount",
+            text: "The ETH amount you have entered is not enough.",
             button: true
         })
 }
