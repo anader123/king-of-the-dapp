@@ -168,9 +168,9 @@ export default class Dashboard extends Component {
             const value = web3.utils.toWei(kingInputAmount);
 
             contract.methods.becomeKing().send({ from: userAccount, value })
-                .on('receipt', (txHash) => {
+                .on('receipt', (receipt) => {
                     this.checkEthBalance(userAccount);
-                    transactionSuccessAlert(txHash);
+                    transactionSuccessAlert(receipt.transactionHash);
                 })
                 .on('error', (error) => {
                     console.log(error);

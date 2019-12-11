@@ -10,7 +10,7 @@ export const networkErrorAlert = () => {
         })
 }
 
-export const transactionSuccessAlert = (response) => {
+export const transactionSuccessAlert = (txHash) => {
     return swal({
             icon: 'success',
             title: 'Tx Successfully Sent',
@@ -19,7 +19,7 @@ export const transactionSuccessAlert = (response) => {
                 <div>
                     <p>Transaction Hash:</p>
                     <p>
-                        <a target="_blank" rel="noopener noreferrer" href={`https://ropsten.etherscan.io/tx/${response.transactionHash}`}>{response.transactionHash}</a>
+                        <a target="_blank" rel="noopener noreferrer" href={`https://ropsten.etherscan.io/tx/${txHash}`}>{txHash}</a>
                     </p>
                 </div>)
         })
