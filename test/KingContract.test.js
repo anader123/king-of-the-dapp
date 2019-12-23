@@ -3,7 +3,7 @@ require('chai')
 .use(require('chai-as-promised'))
 .should();
 
-contract('KingDappContract', ([deployer, newKing, failAccount]) => {
+contract('KingDappContract', ([deployer, newKing, failAccount, testKing]) => {
     let kingDapp 
 
     beforeEach(async () => {
@@ -12,7 +12,7 @@ contract('KingDappContract', ([deployer, newKing, failAccount]) => {
 
     describe('deployment tests', () => {
         it('tracks king address', async () => {
-            const result = await kingDapp.King();
+            const result = await kingDapp.king();
             result.should.equal(deployer);
         })
 
@@ -39,8 +39,9 @@ contract('KingDappContract', ([deployer, newKing, failAccount]) => {
         })
 
         describe('success', async () => {
+            
             it('should update the King to the senders address', async () => {
-                result = await kingDapp.King();
+                result = await kingDapp.king();
                 result.should.equal(newKing);
             })
 
@@ -54,9 +55,41 @@ contract('KingDappContract', ([deployer, newKing, failAccount]) => {
                 const log = changeKings.logs[0];
                 log.event.should.equal('Coronation');
                 const event = log.args;
-                event._newKing.should.equal(newKing, 'king address is correct');
-                event._kingRansom.toString().should.equal(web3.utils.toWei('1', 'ether'), 'kingRansom is correct');
+                event.newKing.should.equal(newKing, 'king address is correct');
+                event.kingRansom.toString().should.equal(web3.utils.toWei('1', 'ether'), 'kingRansom is correct');
             })
+
+            describe('refunding previous king', () => {
+                let king; 
+
+                beforeEach(async () => {
+                    king = await kingDapp.king();
+                    const value = web3.utils.toWei('2', 'ether');
+                    changeKings = await kingDapp.becomeKing({ from: testKing, value });
+                })
+
+                it('should add old king balance to the refund mapping', async () => {
+                    result = await kingDapp.refunds(king);
+                    result = web3.utils.fromWei(result);
+                    result.should.equal('1');
+                })
+
+                it('should emit a "Refund" event', async () => {
+                    const refund = await kingDapp.withdrawRefund({ from: newKing });
+                    const log = refund.logs[0];
+                    log.event.should.equal('Refund');
+                    const event = log.args;
+                    event.to.should.equal(newKing, 'king address is correct');
+                    event.refundAmount.toString().should.equal(web3.utils.toWei('1', 'ether'), 'kingRansom is correct');
+                })
+    
+                it('should update the refunds mapping after the refund is send', async () => {
+                    await kingDapp.withdrawRefund({ from: newKing });
+                    result = await kingDapp.refunds(king);
+                    result.toString().should.equal('0');
+                })
+            })
+
         })
 
         describe('failure', async () => {

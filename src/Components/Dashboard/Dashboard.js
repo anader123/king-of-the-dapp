@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+
+// Ethereum Items
 import Web3 from 'web3';
 import { abi } from '../../abis/KingDappContract';
 import BigNumber from 'bignumber.js';
